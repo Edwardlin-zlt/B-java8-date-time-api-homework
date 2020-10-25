@@ -30,7 +30,8 @@ public class MeetingSystemV3 {
 
         LocalDateTime now = LocalDateTime.now();
         if (now.isAfter(meetingTime)) {
-            LocalDateTime tomorrow = now.plusDays(1);
+            Period period = Period.ofDays(1);
+            LocalDateTime tomorrow = now.plus(period);
             int dayOfYear = tomorrow.getDayOfYear();
             LocalDateTime nextMeetingTime = meetingTime.withDayOfYear(dayOfYear);
 
