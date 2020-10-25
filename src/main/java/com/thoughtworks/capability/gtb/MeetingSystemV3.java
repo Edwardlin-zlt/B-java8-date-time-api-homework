@@ -19,6 +19,7 @@ public class MeetingSystemV3 {
 
     public static void main(String[] args) {
         String timeStr = "2020-04-01 14:30:00";
+        ZoneId localZoneId = ZoneId.systemDefault();
 
         // 根据格式创建格式化类
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -26,7 +27,8 @@ public class MeetingSystemV3 {
         LocalDateTime ParsedMeetingTime = LocalDateTime.parse(timeStr, formatter);
         ZoneId zoneId = ZoneId.of("Europe/London");
         ZonedDateTime meetingTimeAtLondon = ParsedMeetingTime.atZone(zoneId);
-        LocalDateTime meetingTime = meetingTimeAtLondon.toLocalDateTime();
+        ZonedDateTime meetingTimeAtLocal = meetingTimeAtLondon.withZoneSameInstant(localZoneId);
+        LocalDateTime meetingTime = meetingTimeAtLocal.toLocalDateTime();
 
         LocalDateTime now = LocalDateTime.now();
         if (now.isAfter(meetingTime)) {
@@ -36,7 +38,7 @@ public class MeetingSystemV3 {
             LocalDateTime nextMeetingTime = meetingTime.withDayOfYear(dayOfYear);
 
             // 格式化新会议时间
-            ZonedDateTime nextMeetingTimeAtLocal = nextMeetingTime.atZone(ZoneId.systemDefault());
+            ZonedDateTime nextMeetingTimeAtLocal = nextMeetingTime.atZone(localZoneId);
             ZonedDateTime meetingTimeAtChicago = nextMeetingTimeAtLocal.withZoneSameInstant(ZoneId.of("America/Chicago"));
             String showTimeStr = formatter.format(meetingTimeAtChicago);
             System.out.println(showTimeStr);
